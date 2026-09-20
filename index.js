@@ -31,7 +31,7 @@ function init() {
         scene.add(gltf.scene);
     });
     
-    camera.position.z = 8;
+    camera.position.z = 6;
 }
 
 function animate() {
