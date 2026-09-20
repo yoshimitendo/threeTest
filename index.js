@@ -23,7 +23,6 @@ function init() {
 
     loader.load("monkey.glb", (gltf) => {
         gltf.scene.traverse((object) => {
-            console.log(object);
             if (object.isMesh) {
                 object.material = new THREE.MeshNormalMaterial();
                 monkey = object;
@@ -38,10 +37,10 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
     
-    if (monkey) {
-        monkey.rotation.x += 0.01;
-        monkey.rotation.y += 0.01;
-    }
+    // if (monkey) {
+    //     monkey.rotation.x += 0.01;
+    //     monkey.rotation.y += 0.01;
+    // }
     
     renderer.render(scene, camera);
 }
@@ -55,4 +54,33 @@ function resizeWindow() {
 window.addEventListener("resize", resizeWindow);
 
 init();
+
+let dragging = false;
+let previousX = 0;
+let previousY = 0;
+
+renderer.domElement.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    previousX = e.clientX;
+    previousY = e.clientY;
+});
+
+renderer.domElement.addEventListener("pointermove", (e) => {
+    if (!dragging || !monkey) return;
+    const dx = e.clientX - previousX;
+    const dy = e.clientY - previousY;
+    monkey.rotation.y += dx * 0.01;
+    monkey.rotation.x += dy * 0.01;
+    previousX = e.clientX;
+    previousY = e.clientY;
+});
+
+renderer.domElement.addEventListener("pointerup", (e) => {
+    dragging = false;
+});
+
+renderer.domElement.addEventListener("pointerlieve", (e) => {
+    dragging = false;
+});
+
 animate();
