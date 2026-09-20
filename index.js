@@ -37,11 +37,6 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
     
-    // if (monkey) {
-    //     monkey.rotation.x += 0.01;
-    //     monkey.rotation.y += 0.01;
-    // }
-    
     renderer.render(scene, camera);
 }
 
