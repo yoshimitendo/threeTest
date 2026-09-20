@@ -1,6 +1,7 @@
 import * as THREE from "three";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js";
 
-let scene, camera, renderer, cube;
+let scene, camera, renderer, monkey;
 
 function init() {
     scene = new THREE.Scene();
@@ -17,21 +18,31 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     
     document.body.appendChild(renderer.domElement);
+
+    const loader = new GLTFLoader();
+
+    loader.load("monkey.glb", (gltf) => {
+        gltf.scene.traverse((object) => {
+            console.log(object);
+            if (object.isMesh) {
+                object.material = new THREE.MeshNormalMaterial();
+                monkey = object;
+            }
+        })
+        scene.add(gltf.scene);
+    });
     
-    const geometyr = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({color: 0x0000ff})
-    cube = new THREE.Mesh(geometyr, material);
-    scene.add(cube);
-    
-    camera.position.z = 5;
+    camera.position.z = 8;
 }
 
 function animate() {
     requestAnimationFrame(animate);
-
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-
+    
+    if (monkey) {
+        monkey.rotation.x += 0.01;
+        monkey.rotation.y += 0.01;
+    }
+    
     renderer.render(scene, camera);
 }
 
